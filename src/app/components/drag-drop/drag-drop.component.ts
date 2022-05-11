@@ -8,10 +8,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class DragDropComponent implements OnInit {
 
   @Input() formatReturn: 'base64' | 'filelist' = 'base64';
-  @Input() limit: number = 10;
+  @Input() limit: number = 25;
   @Input() current: string[] = [];
   @Input() showImages: boolean = true;
   @Input() showEmptyImages: boolean = true;
+  @Input() colorShadow: string = '#ff0000';
 
   @Output() filesDropped: EventEmitter<File[] | string[]> = new EventEmitter<File[] | string[]>();
   @Output() filesCurrent: EventEmitter<string[]> = new EventEmitter<string[]>();
@@ -31,10 +32,26 @@ export class DragDropComponent implements OnInit {
     console.log(event.type)
   }
 
+  isOverLimit(files: FileList) {
+    return (files.length + this.currentFiles.length + this.filesBase64.length) > this.limit;
+  }
+
   async getFiles(event: any) {
     console.log(event)
     console.log(event.type);
-    event = event.type ? event.target.files : event;
+
+    if (this.isOverLimit(event)) {
+      console.log("El numero de filas está excediendo el límite perimitido.");
+      return;
+    }
+    if (event.type) {
+      event = event.target.files;
+      if (this.isOverLimit(event)) {
+        console.log("El numero de filas está excediendo el límite perimitido.");
+        return;
+      }
+    }
+
     switch (this.formatReturn) {
       case 'base64':
         let base64Collection: string[] = [];
@@ -44,7 +61,6 @@ export class DragDropComponent implements OnInit {
         }
         this.filesDropped.emit(base64Collection);
         console.log("Emitiendo: ", base64Collection);
-
         break;
       case 'filelist':
         let fileCollection: File[] = [];

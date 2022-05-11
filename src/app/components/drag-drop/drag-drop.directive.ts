@@ -27,6 +27,7 @@ export class DragDropDirective {
     this.prevent(event);
     console.log(event.dataTransfer.files);
     this.files.emit(event.dataTransfer.files);
+    this.over.emit(false);
   }
 
    prevent(event: any){

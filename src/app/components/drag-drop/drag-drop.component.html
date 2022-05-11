@@ -1,5 +1,5 @@
 <div  class="container">
-  <div DragDrop (over)="isOver=$event" (files)="getFiles($event)" class="drop-zone" (click)="file.click()">
+  <div DragDrop (over)="isOver=$event" (files)="getFiles($event)" class="drop-zone" [ngClass]="{'dragover': isOver ,'dragleave': !isOver}" [style]="'--color-shadow:' + colorShadow" (click)="file.click()">
     <div><h1>Arrastra aquí</h1></div>
     <div><h1>ó</h1></div>
     <input #file type="file" [multiple]="limit>1" (input)="getFiles($event)" hidden>
