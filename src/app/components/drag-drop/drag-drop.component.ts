@@ -8,11 +8,13 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class DragDropComponent implements OnInit {
 
   @Input() formatReturn: 'base64' | 'filelist' = 'base64';
-  @Input() limit: number = 25;
+  @Input() limit: number = 100;
   @Input() current: string[] = [];
   @Input() showImages: boolean = true;
   @Input() showEmptyImages: boolean = true;
   @Input() colorShadow: string = '#ff0000';
+  @Input() maxSizePerFile: number = 100;
+  @Input() filesTypesAcceptable: string[] = ['jpg', 'png', 'jpeg'];
 
   @Output() filesDropped: EventEmitter<File[] | string[]> = new EventEmitter<File[] | string[]>();
   @Output() filesCurrent: EventEmitter<string[]> = new EventEmitter<string[]>();
@@ -37,11 +39,12 @@ export class DragDropComponent implements OnInit {
   }
 
   async getFiles(event: any) {
+    //this.parseFileList(event as FileList);
     console.log(event)
     console.log(event.type);
 
     if (this.isOverLimit(event)) {
-      console.log("El numero de filas está excediendo el límite perimitido.");
+      console.log("El numero de filas está excediendo el límite permitido.");
       return;
     }
     if (event.type) {
@@ -51,6 +54,15 @@ export class DragDropComponent implements OnInit {
         return;
       }
     }
+    event = this.parseEvent(event);
+
+    console.log("Event: ", event);
+
+    event = this.removeLargeFiles(event);
+
+
+    event = this.removeTypesUnsupported(event);
+    //console.log("Event despues de filtrar: ", event);
 
     switch (this.formatReturn) {
       case 'base64':
@@ -79,7 +91,6 @@ export class DragDropComponent implements OnInit {
         this.filesBase64.splice(idx, 1);
         this.filesDropped.emit(this.filesBase64);
         console.log("Emitiendo: ", this.filesBase64);
-
         break;
       case 'current':
         this.currentFiles.splice(idx, 1);
@@ -87,7 +98,6 @@ export class DragDropComponent implements OnInit {
         console.log("Emitiendo: ", this.currentFiles);
         break;
     }
-
   }
 
   async toBase64(file: File) {
@@ -97,6 +107,35 @@ export class DragDropComponent implements OnInit {
       reader.onload = () => resolve(reader.result);
       reader.onerror = error => reject(error);
     });
+  }
+
+  parseEvent(event: FileList){
+    return Array.from(event);
+  }
+
+  removeLargeFiles(files: File[]){
+    let filesResult: File[]= [];
+    for (const file of files) {
+      if(!(file.size/(1024**2)>this.maxSizePerFile)){
+        filesResult.push(file);
+      }else{
+        console.log(`El archivo ${file.name} está sobre el límite permitido.`);
+      }
+    }
+    return filesResult;
+  }
+
+  removeTypesUnsupported(files: File[]){
+    let result: File[] = [];
+    for (let file of files) {
+      if(this.filesTypesAcceptable.some(type=>file.type.includes(type))){
+        console.log("Entro con este archivo, su tipo es: ", file.type);
+        result.push(file);
+      }else{
+        console.error("No entro con este archivo, su tipo es: ", file.type);
+      }
+    }
+    return result;
   }
 
 }
