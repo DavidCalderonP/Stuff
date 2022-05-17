@@ -9,8 +9,34 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css"/>
+
+
+  <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
+
 </head>
 <body class="mat-typography">
-  <app-root></app-root>
+
+<app-root></app-root>
+<py-env>
+  - numpy
+  - matplotlib
+  - paths:
+    - ./assets/data.py
+</py-env>
+<h1>Let's plot random numbers</h1>
+<div id="plot"></div>
+<py-script output="plot">
+  import matplotlib.pyplot as plt
+  from data import make_x_and_y
+
+  x, y = make_x_and_y(n=500)
+
+  fig, ax = plt.subplots()
+  ax.scatter(x, y)
+  fig
+</py-script>
+<script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+
 </body>
 </html>

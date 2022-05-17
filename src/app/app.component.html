@@ -28,3 +28,21 @@
 
 
 <!--</div>-->
+<py-env>
+  - numpy
+  - matplotlib
+  - paths:
+    - ./assets/data.py
+</py-env>
+<h1>comp</h1>
+<div id="plot"></div>
+<py-script output="plot">
+  import matplotlib.pyplot as plt
+  from data import make_x_and_y
+
+  x, y = make_x_and_y(n=500)
+
+  fig, ax = plt.subplots()
+  ax.scatter(x, y)
+  fig
+</py-script>
