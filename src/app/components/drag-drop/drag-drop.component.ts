@@ -7,7 +7,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class DragDropComponent implements OnInit {
 
-  @Input() formatReturn: 'base64' | 'filelist' = 'base64';
+  @Input() formatReturn: 'base64' | 'filelist' = 'filelist';
   @Input() limit: number = 100;
   @Input() current: string[] = [];
   @Input() showImages: boolean = true;
@@ -43,6 +43,9 @@ export class DragDropComponent implements OnInit {
     console.log(event)
     console.log(event.type);
 
+    console.log(URL.createObjectURL(event.target.files[0]));
+
+
     if (this.isOverLimit(event)) {
       console.log("El numero de filas está excediendo el límite permitido.");
       return;
@@ -71,18 +74,28 @@ export class DragDropComponent implements OnInit {
           base64Collection.push(await this.toBase64(file) as string);
           this.filesBase64.push(await this.toBase64(file) as string);
         }
-        this.filesDropped.emit(base64Collection);
-        console.log("Emitiendo: ", base64Collection);
+        this.filesDropped.emit(this.filesBase64.concat(...base64Collection));
+        console.log("Todo: ", this.filesBase64);
         break;
       case 'filelist':
         let fileCollection: File[] = [];
         for (const file of event) {
           fileCollection.push(file);
+          const blob = await this.getFileWithoutBase64(file) as string;
+          console.log("blob: ", blob);
+
+          this.currentFiles.push(blob);
         }
-        console.log(fileCollection)
+        console.log("emitiendo: ",fileCollection)
         this.filesDropped.emit(fileCollection);
         break;
     }
+  }
+
+  getFileWithoutBase64(file: File){
+    return new Promise((resolve, reject)=>{
+      resolve(URL.createObjectURL(file));
+    })
   }
 
   deleteImage(idx: number, where: string) {
@@ -100,7 +113,7 @@ export class DragDropComponent implements OnInit {
     }
   }
 
-  async toBase64(file: File) {
+  toBase64(file: File) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);

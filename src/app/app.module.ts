@@ -7,12 +7,14 @@ import { DragDropComponent } from './components/drag-drop/drag-drop.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatIconModule} from "@angular/material/icon";
 import { DragDropDirective } from './components/drag-drop/drag-drop.directive';
+import { BlobsafePipe } from './components/drag-drop/blobsafe.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     DragDropComponent,
-    DragDropDirective
+    DragDropDirective,
+    BlobsafePipe
   ],
   imports: [
     BrowserModule,
