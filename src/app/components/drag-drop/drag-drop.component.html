@@ -1,4 +1,4 @@
-<div  class="container">
+<div *ngIf="isValidInitialData" class="container">
   <div DragDrop (over)="isOver=$event" (files)="getFiles($event)" class="drop-zone" [ngClass]="{'dragover': isOver ,'dragleave': !isOver}" [style]="'--color-shadow:' + colorShadow" (click)="file.click()">
     <div><h1>Arrastra aquí</h1></div>
     <div><h1>ó</h1></div>
@@ -9,11 +9,11 @@
   <div *ngIf="showImages" class="gallery">
     <div class="text-empty"><span *ngIf="currentFiles.length==0 && filesBase64.length==0 && showEmptyImages">No hay imágenes por mostrar.</span></div>
     <div *ngFor="let file of currentFiles;let i = index;" class="image-container">
-      <div class="delete"><mat-icon (click)="deleteImage(i, 'current')">clear</mat-icon></div>
+      <div *ngIf="canDelete" class="delete"><mat-icon (click)="deleteImage(i, 'current')">clear</mat-icon></div>
       <img [id]="'img'+i"[src]="file | blobsafe" alt="">
     </div>
     <div *ngFor="let file of filesBase64;let i = index;" class="image-container">
-      <div class="delete"><mat-icon (click)="deleteImage(i, 'temp')">clear</mat-icon></div>
+      <div *ngIf="canDelete" class="delete"><mat-icon (click)="deleteImage(i, 'temp')">clear</mat-icon></div>
       <img [src]="file" alt="">
     </div>
 

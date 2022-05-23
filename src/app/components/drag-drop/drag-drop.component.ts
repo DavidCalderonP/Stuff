@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { isEmptyExpression } from '@angular/compiler';
+import { Component, ErrorHandler, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'drag-drop',
@@ -7,13 +8,14 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class DragDropComponent implements OnInit {
 
-  @Input() formatReturn: 'base64' | 'filelist' = 'filelist';
+  @Input() formatReturn: 'base64' | 'filelist' = 'base64';
   @Input() limit: number = 100;
   @Input() current: string[] = [];
   @Input() showImages: boolean = true;
   @Input() showEmptyImages: boolean = true;
+  @Input() canDelete: boolean = true;
   @Input() colorShadow: string = '#ff0000';
-  @Input() maxSizePerFile: number = 100;
+  @Input() maxSizePerFile: number = 20;
   @Input() filesTypesAcceptable: string[] = ['jpg', 'png', 'jpeg'];
 
   @Output() filesDropped: EventEmitter<File[] | string[]> = new EventEmitter<File[] | string[]>();
@@ -28,10 +30,17 @@ export class DragDropComponent implements OnInit {
 
   ngOnInit(): void {
     this.current.forEach(image => this.currentFiles.push(image))
+    // if(this.current.length>this.limit){
+    //   console.error("Andas valiendo verga");
+    // }
+  }
+
+  isValidInitialData(): boolean{
+    return this.current.length <= this.limit;
   }
 
   printEvent(event: any) {
-    console.log(event.type)
+    //console.log(event.type)
   }
 
   isOverLimit(files: FileList) {
@@ -40,14 +49,10 @@ export class DragDropComponent implements OnInit {
 
   async getFiles(event: any) {
     //this.parseFileList(event as FileList);
-    console.log(event)
-    console.log(event.type);
-
-    console.log(URL.createObjectURL(event.target.files[0]));
-
-
+    //console.log(event)
+    //console.log(event.type);
     if (this.isOverLimit(event)) {
-      console.log("El numero de filas está excediendo el límite permitido.");
+      console.error(`El numero de filas está excediendo el límite permitido.\nNúmero de filas actual: ${this.currentFiles.length + this.filesBase64.length}.\nNueva entrada: ${event.length}.\nLimite: ${this.limit}.`);
       return;
     }
     if (event.type) {
@@ -59,6 +64,10 @@ export class DragDropComponent implements OnInit {
     }
     event = this.parseEvent(event);
 
+    if(event.length==0){
+      return;
+    }
+
     console.log("Event: ", event);
 
     event = this.removeLargeFiles(event);
@@ -69,26 +78,24 @@ export class DragDropComponent implements OnInit {
 
     switch (this.formatReturn) {
       case 'base64':
-        let base64Collection: string[] = [];
         for (const file of event) {
-          base64Collection.push(await this.toBase64(file) as string);
           this.filesBase64.push(await this.toBase64(file) as string);
         }
-        this.filesDropped.emit(this.filesBase64.concat(...base64Collection));
+        this.filesDropped.emit(this.filesBase64);
         console.log("Todo: ", this.filesBase64);
         break;
-      case 'filelist':
-        let fileCollection: File[] = [];
-        for (const file of event) {
-          fileCollection.push(file);
-          const blob = await this.getFileWithoutBase64(file) as string;
-          console.log("blob: ", blob);
+      // case 'filelist':
+      //   let fileCollection: File[] = [];
+      //   for (const file of event) {
+      //     fileCollection.push(file);
+      //     const blob = await this.getFileWithoutBase64(file) as string;
+      //     console.log("blob: ", blob);
 
-          this.currentFiles.push(blob);
-        }
-        console.log("emitiendo: ",fileCollection)
-        this.filesDropped.emit(fileCollection);
-        break;
+      //     this.currentFiles.push(blob);
+      //   }
+      //   console.log("emitiendo: ",fileCollection)
+      //   this.filesDropped.emit(fileCollection);
+      //   break;
     }
   }
 
@@ -99,6 +106,7 @@ export class DragDropComponent implements OnInit {
   }
 
   deleteImage(idx: number, where: string) {
+    if(!this.canDelete) return;
     switch (where) {
       case 'temp':
         this.filesBase64.splice(idx, 1);
@@ -129,13 +137,21 @@ export class DragDropComponent implements OnInit {
   removeLargeFiles(files: File[]){
     let filesResult: File[]= [];
     for (const file of files) {
-      if(!(file.size/(1024**2)>this.maxSizePerFile)){
+      if(!(file.size>(this.megaToByte(this.maxSizePerFile)))){
         filesResult.push(file);
       }else{
-        console.log(`El archivo ${file.name} está sobre el límite permitido.`);
+        console.error(`El archivo ${file.name} está sobre el límite permitido.\n Espacio en disco: ${this.byteToMega(file.size)} MB.\n El límite por archivo es: ${this.maxSizePerFile} MB.`);
       }
     }
     return filesResult;
+  }
+
+  byteToMega(size: number){
+    return Number((size/(1000**2)).toFixed(1));
+  }
+
+  megaToByte(size: number){
+    return Number((size*(1024**2)).toFixed(1));
   }
 
   removeTypesUnsupported(files: File[]){
@@ -145,7 +161,7 @@ export class DragDropComponent implements OnInit {
         console.log("Entro con este archivo, su tipo es: ", file.type);
         result.push(file);
       }else{
-        console.error("No entro con este archivo, su tipo es: ", file.type);
+        console.error(`El archivo ${file.name} no fue admitido.\n Tipo de archivo: ${file.type}`);
       }
     }
     return result;
