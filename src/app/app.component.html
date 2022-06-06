@@ -1,9 +1,10 @@
 <drag-drop
 [current]="images"
-[limit]="10"
+[limit]="50"
 [colorShadow]="'#23d4c8'"
 [maxSizePerFile]="1"
 (filesDropped)="getFiles($event)"
+(filesCurrent)="getCurrentFiles($event)"
 ></drag-drop>
 <!-- <drag-drop></drag-drop> -->
 
