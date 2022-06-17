@@ -10,6 +10,7 @@ import { DragDropDirective } from './components/drag-drop/drag-drop.directive';
 import { BlobsafePipe } from './components/drag-drop/blobsafe.pipe';
 import { ParentComponent } from './components/ChangeDetectionStrategy/parent/parent.component';
 import { ChildComponent } from './components/ChangeDetectionStrategy/child/child.component';
+import { HighlighterDirective } from './components/ChangeDetectionStrategy/highlighter.directive';
 
 @NgModule({
   declarations: [
@@ -18,13 +19,15 @@ import { ChildComponent } from './components/ChangeDetectionStrategy/child/child
     DragDropDirective,
     BlobsafePipe,
     ParentComponent,
-    ChildComponent
+    ChildComponent,
+    HighlighterDirective,
+    HighlighterDirective,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatIconModule
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatIconModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
