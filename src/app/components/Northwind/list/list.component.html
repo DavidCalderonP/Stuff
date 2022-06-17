@@ -1,0 +1,99 @@
+<div  class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource">
+
+        <ng-container matColumnDef="EmployeeID">
+            <th mat-header-cell *matHeaderCellDef> ID.</th>
+            <td mat-cell *matCellDef="let element"> {{element.EmployeeID}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="FirstName">
+            <th mat-header-cell *matHeaderCellDef> FirstName</th>
+            <td mat-cell *matCellDef="let element"> {{element.FirstName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="LastName">
+            <th mat-header-cell *matHeaderCellDef> LastName</th>
+            <td mat-cell *matCellDef="let element"> {{element.LastName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Title">
+            <th mat-header-cell *matHeaderCellDef> Title</th>
+            <td mat-cell *matCellDef="let element"> {{element.Title}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="TitleOfCourtesy">
+            <th mat-header-cell *matHeaderCellDef> TitleOfCourtesy</th>
+            <td mat-cell *matCellDef="let element"> {{element.TitleOfCourtesy}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="BirthDate">
+            <th mat-header-cell *matHeaderCellDef> BirthDate</th>
+            <td mat-cell *matCellDef="let element"> {{element.BirthDate}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="HireDate">
+            <th mat-header-cell *matHeaderCellDef> HireDate</th>
+            <td mat-cell *matCellDef="let element"> {{element.HireDate}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="Address">
+            <th mat-header-cell *matHeaderCellDef> Address</th>
+            <td mat-cell *matCellDef="let element"> {{element.Address}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="City">
+            <th mat-header-cell *matHeaderCellDef> City</th>
+            <td mat-cell *matCellDef="let element"> {{element.City}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="Region">
+            <th mat-header-cell *matHeaderCellDef> Region</th>
+            <td mat-cell *matCellDef="let element"> {{element.Region}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="PostalCode">
+            <th mat-header-cell *matHeaderCellDef> PostalCode</th>
+            <td mat-cell *matCellDef="let element"> {{element.PostalCode}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="Country">
+            <th mat-header-cell *matHeaderCellDef> Country</th>
+            <td mat-cell *matCellDef="let element"> {{element.Country}} </td>
+        </ng-container>
+        <ng-container matColumnDef="HomePhone">
+            <th mat-header-cell *matHeaderCellDef> HomePhone</th>
+            <td mat-cell *matCellDef="let element"> {{element.HomePhone}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Extension">
+            <th mat-header-cell *matHeaderCellDef> Extension</th>
+            <td mat-cell *matCellDef="let element"> {{element.Extension}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Notes">
+            <th mat-header-cell *matHeaderCellDef> Notes</th>
+            <td mat-cell *matCellDef="let element"> {{element.Notes}} </td>
+        </ng-container>
+        <ng-container matColumnDef="ReportsTo">
+            <th mat-header-cell *matHeaderCellDef> ReportsTo</th>
+            <td mat-cell *matCellDef="let element"> {{element.ReportsTo}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Salary">
+            <th mat-header-cell *matHeaderCellDef> Salary</th>
+            <td mat-cell *matCellDef="let element"> {{element.Salary}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+
+    </table>
+    <mat-paginator [pageSizeOptions]="[1,3,4]" [pageSize]="perPage" [length]="total" (page)="pageSelection($event)"></mat-paginator>
+
+</div>
