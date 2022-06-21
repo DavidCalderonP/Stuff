@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
         data.subscribe(res => {
-            console.log(res);
+            //console.log(res);
             this.images = res;
         })
     }
