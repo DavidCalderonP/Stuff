@@ -10,6 +10,7 @@ import {Employee} from "./list/list.component";
 export class ListService {
 
     private baseUrl: string = environment.API;
+    private baseUrlStorage: string = environment.STORAGE;
 
     constructor(private http: HttpClient) {
     }
@@ -20,7 +21,7 @@ export class ListService {
             .set('page', page ? page : '')
 
         const options = {params: params};
-        return this.http.get(`${this.baseUrl}employees`, options);
+        return this.http.get(`${this.baseUrl}emp/employees`, options);
     }
 
     fileUpload(images: any): Observable<any> {
@@ -35,7 +36,7 @@ export class ListService {
 
       const options = new HttpParams()
         .set('Authorization', '');
-      return this.http.post(`${this.baseUrl}employees`,  data);
+      return this.http.post(`${this.baseUrl}emp/employees`,  data);
     }
 
     getFile(path: string): Observable<any>{
@@ -57,4 +58,16 @@ export class ListService {
     return res;
   }
 
+  toDataURL(url: string) {
+    return fetch(url).then((response) => {
+      return response.blob();
+    }).then(blob => {
+      return URL.createObjectURL(blob);
+    });
+  }
+
+
+  getImages(): Observable<any> {
+    return this.http.get(this.baseUrl + 'emp/images');
+  }
 }

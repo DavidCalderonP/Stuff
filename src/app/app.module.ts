@@ -8,13 +8,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatIconModule} from "@angular/material/icon";
 import { DragDropDirective } from './components/drag-drop/drag-drop.directive';
 import { BlobsafePipe } from './components/drag-drop/blobsafe.pipe';
-import { ParentComponent } from './components/ChangeDetectionStrategy/parent/parent.component';
-import { ChildComponent } from './components/ChangeDetectionStrategy/child/child.component';
-import { HighlighterDirective } from './components/ChangeDetectionStrategy/highlighter.directive';
 import { ListComponent } from './components/Northwind/list/list.component';
 import {HttpClientModule} from "@angular/common/http";
 import {MatTableModule} from "@angular/material/table";
 import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatButtonModule} from "@angular/material/button";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatSelectModule} from "@angular/material/select";
 
 @NgModule({
   declarations: [
@@ -22,21 +22,20 @@ import {MatPaginatorModule} from "@angular/material/paginator";
     DragDropComponent,
     DragDropDirective,
     BlobsafePipe,
-    ParentComponent,
-    ChildComponent,
-    HighlighterDirective,
-    HighlighterDirective,
     ListComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MatIconModule,
-        HttpClientModule,
-        MatTableModule,
-        MatPaginatorModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatIconModule,
+    HttpClientModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatSelectModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

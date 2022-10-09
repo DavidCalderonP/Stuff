@@ -1,4 +1,4 @@
-<app-list></app-list>
+<!--<app-list></app-list>-->
 <!--<app-parent></app-parent>-->
 <!--<drag-drop-->
 <!--[current]="images"-->
@@ -8,8 +8,10 @@
 <!--(filesDropped)="getFiles($event)"-->
 <!--(filesCurrent)="getCurrentFiles($event)"-->
 <!--&gt;</drag-drop>-->
-<!-- <drag-drop></drag-drop> -->
-
+ <drag-drop (filesDropped)="getFiles($event)" [showImages]="false"></drag-drop>
+<button class="btn btn-primary" (click)="onSumbit()">Enviar</button>
+<button class="btn btn-primary" (click)="sendFotos()">Enviar Fotos</button>
+<button (click)="downloadFile()">Download</button>
 
 <!--Iconos de carga css puro-->
 <!--<div class="container" style="display: inline-flex">-->

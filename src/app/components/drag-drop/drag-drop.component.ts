@@ -16,7 +16,7 @@ export class DragDropComponent implements OnInit {
   @Input() canDelete: boolean = true;
   @Input() colorShadow: string = '#ff0000';
   @Input() maxSizePerFile: number = 20;
-  @Input() filesTypesAcceptable: string[] = ['jpg', 'png', 'jpeg'];
+  @Input() filesTypesAcceptable: string[] = ['jpg', 'png', 'jpeg', 'xml'];
 
   @Output() filesDropped: EventEmitter<File[] | string[]> = new EventEmitter<File[] | string[]>();
   @Output() filesCurrent: EventEmitter<string[]> = new EventEmitter<string[]>();
